@@ -1,0 +1,30 @@
+version: '2.4'
+
+services:
+   data_prepare:
+     image: data_preprocessing
+     container_name: data_preprocessing
+     runtime: nvidia
+     environment:
+        NVIDIA_VISIBLE_DEVICES: all
+        DISPLAY: $DISPLAY
+        LIBUSB_DEBUG: 0
+        LIBFREENECT2_PIPELINE: cuda
+        QT_X11_NO_MITSHM: 1
+        NVIDIA_DRIVER_CAPABILITIES: graphics,compute,utility
+        stdin_open: 1
+        restart: 'unless-stopped'
+        network_mode: host
+     volumes:
+          - /dev/bus/usb:/dev/bus/usb
+          #- /dev/video0:/dev/video0
+          - /tmp/.X11-unix:/tmp/.X11-unix:rw
+          - $HOME/.Xauthority:/root/.Xauthority
+          - /home/nishanth/kidz/synthetic_dataset/data_preprocessing/src:/root/src
+          #- /home/nishanth/dataset/alu_multi/:/root/src/images/
+          #- /home/nishanth/dataset/mechanical_parts_yolo/:/root/src/mechanical_parts_yolo/
+          - /home/nishanth/kidz/synthetic_dataset/object_classification/src/train_dataset:/root/src/train_dataset
+     tty: true
+     privileged: true
+     command: bash -c "tail -f /dev/null"
+     #command: 
