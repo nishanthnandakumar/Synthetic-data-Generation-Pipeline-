@@ -1,0 +1,32 @@
+item {
+    name: 'Aluminium Extension'
+    id:1
+}
+item {
+    name: 'Ball Bearing'
+    id:2
+}
+item {
+    name: 'T Spring Nut'
+    id:3
+}
+item {
+    name: 'T Nut Square'
+    id:4
+}
+item {
+    name: 'Socket Head Cap Screw'
+    id:5
+}
+item {
+    name: 'Multiwinkel'
+    id:6
+}
+item {
+    name: 'Shoulder Socket Head Cap Screw'
+    id:7
+}
+item {
+    name: 'Pull Handle'
+    id:8
+}
