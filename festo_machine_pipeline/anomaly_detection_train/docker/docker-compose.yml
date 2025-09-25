@@ -1,0 +1,30 @@
+version: '2.4'
+
+services:
+   data_prepare:
+     image: anomaly_detection_festo
+     container_name: anomaly_detection_festo
+     runtime: nvidia
+     environment:
+        NVIDIA_VISIBLE_DEVICES: all
+        DISPLAY: $DISPLAY
+        LIBUSB_DEBUG: 0
+        LIBFREENECT2_PIPELINE: cuda
+        QT_X11_NO_MITSHM: 1
+        #QT_DEBUG_PLUGINS: 1
+        NVIDIA_DRIVER_CAPABILITIES: graphics,compute,utility
+        stdin_open: 1
+        restart: 'unless-stopped'
+        network_mode: host
+     volumes:
+          - /dev/bus/usb:/dev/bus/usb
+          #- /dev/video0:/dev/video0
+          - /tmp/.X11-unix:/tmp/.X11-unix:rw
+          - $HOME/.Xauthority:/root/.Xauthority
+          - /home/nishanth/kidz/synthetic_dataset/festo_machine_pipeline/anomaly_detection_train/src:/root/src
+          - /home/nishanth/kidz/synthetic_dataset/festo_machine_pipeline/anomaly_detection_train/results:/root/results
+          
+     tty: true
+     privileged: true
+     #command: bash -c "tail -f /dev/null"
+     command: bash -c "python3 /root/src/Image_Anomaly_Detection-main/data/inspect_FolderDataModule.py && python3 /root/src/Image_Anomaly_Detection-main/train_anomalib/train_reversedistillation_anomalib.py --dataset_root /root/src/dataset/festo1/ --name_normal_dir fixed --name_wandb_experiment revdist_festo_v1 --name festo --max_epochs 100 --patience 10 && python3 /root/src/Image_Anomaly_Detection-main/infer_anomalib/test_model.py --path_torch_model /root/results/ReverseDistillation/festo/v0/weights/torch/model.pt --path_dataset /root/src/dataset/festo1 --name festo --dir_result /root/results/ReverseDistillation/festo/v0"
