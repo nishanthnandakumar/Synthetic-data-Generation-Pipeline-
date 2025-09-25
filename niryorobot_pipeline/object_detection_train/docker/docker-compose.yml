@@ -1,0 +1,31 @@
+version: '2.4'
+
+services:
+   data_prepare:
+     image: object_detection_train
+     container_name: object_detection_train
+     runtime: nvidia
+     environment:
+        NVIDIA_VISIBLE_DEVICES: all
+        DISPLAY: $DISPLAY
+        LIBUSB_DEBUG: 0
+        LIBFREENECT2_PIPELINE: cuda
+        QT_X11_NO_MITSHM: 1
+        NVIDIA_DRIVER_CAPABILITIES: graphics,compute,utility
+        stdin_open: 1
+        restart: 'unless-stopped'
+        network_mode: host
+     volumes:
+          - /dev/bus/usb:/dev/bus/usb
+          - /dev/video0:/dev/video0
+          - /tmp/.X11-unix:/tmp/.X11-unix:rw
+          - $HOME/.Xauthority:/root/.Xauthority
+          - /home/nishanth/kidz/synthetic_dataset/niryorobot_pipeline/object_detection_train/scripts:/root/scripts
+          - /home/nishanth/kidz/synthetic_dataset/niryorobot_pipeline/object_detection_train/workspace:/root/workspace
+          - /home/nishanth/kidz/synthetic_dataset/niryorobot_pipeline/object_detection_train/protoc:/root/protoc
+          
+          
+     tty: true
+     privileged: true
+     #command: bash -c "tail -f /dev/null"
+     command: bash -c "python3 '/root/scripts/generate_tfrecord.py' -x '/root/workspace/images/train' -l '/root/workspace/annotations/label_map.pbtxt' -o '/root/workspace/annotations/train.record' && python3 '/root/scripts/generate_tfrecord.py' -x '/root/workspace/images/test' -l '/root/workspace/annotations/label_map.pbtxt' -o '/root/workspace/annotations/test.record' && python3 '/root/models-master/research/object_detection/model_main_tf2.py' --model_dir='/root/workspace/models/my_ssd_resnet' --pipeline_config_path='/root/workspace/models/my_ssd_resnet/pipeline.config' --num_train_steps=2000"
