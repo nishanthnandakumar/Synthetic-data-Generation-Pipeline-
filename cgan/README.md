@@ -68,7 +68,8 @@ None
 
 ## Authors
 
-Nishanth Nandakumar @nandakun
+Nishanth Nandakumar
+Jörg Eberhardt
 
 ## License
 
