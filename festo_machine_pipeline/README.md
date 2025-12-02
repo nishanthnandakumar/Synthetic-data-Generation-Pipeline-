@@ -38,7 +38,8 @@ None
 
 ## Authors
 
-Nishanth Nandakumar @nandakun
+Nishanth Nandakumar
+Jörg Eberhardt
 
 ## License
 
@@ -46,4 +47,4 @@ For open source projects, say how it is licensed.
 
 ## Project Status
 
-Ongoing
+Completed
